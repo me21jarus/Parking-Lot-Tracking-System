@@ -5,6 +5,7 @@
 #include <string>
 #include "ParkingSlot.h"
 #include "ParkingStorage.h"
+
 using namespace std;
 
 class ParkingLot{
@@ -14,10 +15,9 @@ class ParkingLot{
     public:
         ParkingLot(int totalSlots, ParkingStorage* storage);
 
-        void parkVehicle(const Vehicle& v);
+        void parkVehicle(unique_ptr<Vehicle> v);
         void removeVehicle(const string& vehicleNumber);
-        void displayStatus();
-        
+        void displayStatus();   
 };
 
 #endif

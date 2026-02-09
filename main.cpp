@@ -1,12 +1,12 @@
 #include<iostream>
 #include "ParkingLot.h"
+#include "VehicleFactory.h"
 #include "ParkingStorage.h"
-#include "Vehicle.h"
 
 using namespace std;
 
 int main(){
-    ParkingStorage* storage;
+    FileParkingStorage storage;
     ParkingLot parkingLot(5, &storage);
     int choice;
 
@@ -21,8 +21,13 @@ int main(){
             cout<<"Enter the vehicle type"<<endl;
             cin>>type;
 
-            Vehicle v(number,type);
-            parkingLot.parkVehicle(v);
+            auto vehicle = VehicleFactory::createVehicle(type,number);
+            if(vehicle){
+                parkingLot.parkVehicle(move(vehicle));
+            }
+            else{
+                cout<<"Invalid Vehicle Type"<<endl;
+            }
         }
         else if(choice == 2){
             string number;
@@ -35,6 +40,7 @@ int main(){
             parkingLot.displayStatus();
         }
         else{
+            cout << "Exiting system..." << endl;
             break;
         }
     }

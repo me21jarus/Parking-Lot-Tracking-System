@@ -13,4 +13,10 @@ class ParkingStorage{
         virtual ~ParkingStorage(){}
 };
 
+class FileParkingStorage : public ParkingStorage{
+public:
+    void save(const vector<ParkingSlot>& slots) override;
+    void load(vector<ParkingSlot>& slots) override;
+};
+
 #endif

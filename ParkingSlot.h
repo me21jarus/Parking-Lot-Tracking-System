@@ -2,12 +2,14 @@
 #define PARKINGSLOT_H
 
 #include "Vehicle.h"
+#include<memory>
+using namespace std;
 
 class ParkingSlot{
     private:
         int slotNumber;
         bool occupied;
-        Vehicle vehicle;
+        unique_ptr<Vehicle> vehicle;;
 
     public:
         ParkingSlot();
@@ -16,9 +18,10 @@ class ParkingSlot{
         bool isOccupied() const;
         int getSlotNumber() const;
 
-        void parkVehicle(const Vehicle& v);
+        void parkVehicle(unique_ptr<Vehicle> vehicle);
         void removeVehicle();
-        Vehicle getVehicle() const;
+        
+        const Vehicle* getVehicle() const;
 };
 
 #endif

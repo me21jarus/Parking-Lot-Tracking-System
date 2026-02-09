@@ -5,17 +5,19 @@
 using namespace std;
 
 class Vehicle{
-
-    private:
+    protected:
         string vehicleNumber;
-        string vehicleType;
 
     public:
         Vehicle();
-        Vehicle(string number, string type);
+        Vehicle(string number):vehicleNumber(number){}
+        virtual ~Vehicle(){}
 
-        string getNumber() const;
-        string getType() const;
+        string getNumber() const{
+            return vehicleNumber;
+        };
+        virtual string getType() const=0;
+        virtual int getRatePerHour() const = 0;
 };
 
 #endif

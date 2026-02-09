@@ -1,18 +1,17 @@
 #include "ParkingStorage.h"
+#include "VehicleFactory.h"
 #include<fstream>
 using namespace std;
 
-class FileParkingStorage : public ParkingStorage{
-public:
-    void save(const vector<ParkingSlot>& slots) override{
+    void FileParkingStorage::save(const vector<ParkingSlot>& slots){
         ofstream file("parking_data.txt");
         for(const auto& slot : slots){
             if(slot.isOccupied()){
-                file<< slot.isOccupied() << " "<< slot.getVehicle().getNumber()<<" "<<slot.getVehicle().getType()<<endl;
+                file<< slot.isOccupied() << " "<< slot.getVehicle()->getNumber()<<" "<<slot.getVehicle()->getType()<<endl;
             }
         }
     }
-    void load(vector<ParkingSlot>& slots) override{
+    void FileParkingStorage::load(vector<ParkingSlot>& slots){
         ifstream file("parking_data.txt");
         if(!file.is_open()){
             return;
@@ -21,10 +20,12 @@ public:
         string number,type;
         while(file>> slotNo >> number >> type){
             for(auto& slot:slots){
-                if(slot.getSlotNumber() == number){
-                    slot.parkVehicle(Vehicle(number,type));
+                if (slot.getSlotNumber() == slotNo) {
+                auto vehicle = VehicleFactory::createVehicle(type, number);
+                if (vehicle) {
+                    slot.parkVehicle(std::move(vehicle));
                 }
+            }
             }
         }
     }
-}

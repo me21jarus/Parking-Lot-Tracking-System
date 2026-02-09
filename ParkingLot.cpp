@@ -40,21 +40,21 @@ ParkingLot::ParkingLot(int totalSlots, ParkingStorage* storage): storage(storage
 //     file.close();
 // }
 
-void ParkingLot::parkVehicle(const Vehicle& v){
+void ParkingLot::parkVehicle(unique_ptr<Vehicle> v){
     for(auto& slot:slots){
         if(!slot.isOccupied()){
-            slot.parkVehicle(v);
+            slot.parkVehicle(move(v));
             storage->save(slots);
             cout<<"Vehicle parked at the slot "<<slot.getSlotNumber()<<endl;
             return;
         }
     }
-    cout<<"Parking slot"<<endl;
+    cout<<"Parking Full"<<endl;
 }
 
 void ParkingLot::removeVehicle(const string& vehicleNumber){
     for(auto& slot:slots){
-        if(slot.isOccupied() && slot.getVehicle().getNumber() == vehicleNumber){
+        if(slot.isOccupied() && slot.getVehicle()->getNumber() == vehicleNumber){
             slot.removeVehicle();
             storage->save(slots);
             cout<<"Vehicle removed from slot "<<slot.getSlotNumber()<<endl;
@@ -67,7 +67,7 @@ void ParkingLot::removeVehicle(const string& vehicleNumber){
 void ParkingLot::displayStatus(){
     for(auto& slot:slots){
         if(slot.isOccupied()){
-            cout<<"Slot: "<< slot.getSlotNumber()<<": "<<slot.getVehicle().getNumber()<<endl;
+            cout<<"Slot: "<< slot.getSlotNumber()<<": "<<slot.getVehicle()->getNumber()<<endl;
         }
         else{
             cout<<"Slot: "<< slot.getSlotNumber()<<": Empty"<<endl;

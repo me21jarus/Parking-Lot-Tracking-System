@@ -18,15 +18,16 @@ int ParkingSlot::getSlotNumber() const{
     return slotNumber;
 }
 
-void ParkingSlot::parkVehicle(const Vehicle& v){
-    vehicle = v;
+void ParkingSlot::parkVehicle(unique_ptr<Vehicle> v){
+    vehicle = move(v);
     occupied = true;
 }
 
 void ParkingSlot::removeVehicle(){
+    vehicle.reset();
     occupied = false;
 }
 
-Vehicle ParkingSlot::getVehicle() const{
-    return vehicle;
+const Vehicle* ParkingSlot::getVehicle() const{
+    return vehicle.get();
 }
