@@ -3,13 +3,15 @@
 
 #include "Vehicle.h"
 #include<memory>
+#include <ctime>
 using namespace std;
 
 class ParkingSlot{
     private:
         int slotNumber;
         bool occupied;
-        unique_ptr<Vehicle> vehicle;;
+        unique_ptr<Vehicle> vehicle;
+        time_t entryTime;
 
     public:
         ParkingSlot();
@@ -20,7 +22,9 @@ class ParkingSlot{
 
         void parkVehicle(unique_ptr<Vehicle> vehicle);
         void removeVehicle();
-        
+
+        time_t getEntryTime() const;
+
         const Vehicle* getVehicle() const;
 };
 

@@ -2,12 +2,14 @@
 #include "ParkingLot.h"
 #include "VehicleFactory.h"
 #include "ParkingStorage.h"
+#include "HourlyPricingStrategy.h"
 
 using namespace std;
 
 int main(){
     FileParkingStorage storage;
-    ParkingLot parkingLot(5, &storage);
+    HourlyPricingStrategy pricing;
+    ParkingLot parkingLot(5, &storage, &pricing);
     int choice;
 
     while(true){

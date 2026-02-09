@@ -3,7 +3,7 @@
 #include<fstream>
 using namespace std;
 
-ParkingLot::ParkingLot(int totalSlots, ParkingStorage* storage): storage(storage){
+ParkingLot::ParkingLot(int totalSlots, ParkingStorage* storage,PricingStrategy* pricing): storage(storage), pricingStrategy(pricing){
     for(int i=1;i<=totalSlots;i++){
         slots.push_back(ParkingSlot(i));
     }
@@ -55,6 +55,16 @@ void ParkingLot::parkVehicle(unique_ptr<Vehicle> v){
 void ParkingLot::removeVehicle(const string& vehicleNumber){
     for(auto& slot:slots){
         if(slot.isOccupied() && slot.getVehicle()->getNumber() == vehicleNumber){
+            time_t exitTime = time(nullptr);
+            int hours = difftime(exitTime,slot.getEntryTime())/3600;
+            if(hours == 0) hours = 1;
+
+            int fee = pricingStrategy->calculateFee(
+                slot.getVehicle(),hours
+            );
+
+            cout<<"Parking fee Rs: "<<fee<<endl;
+
             slot.removeVehicle();
             storage->save(slots);
             cout<<"Vehicle removed from slot "<<slot.getSlotNumber()<<endl;

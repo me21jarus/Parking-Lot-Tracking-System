@@ -20,12 +20,17 @@ int ParkingSlot::getSlotNumber() const{
 
 void ParkingSlot::parkVehicle(unique_ptr<Vehicle> v){
     vehicle = move(v);
+    entryTime = time(nullptr);
     occupied = true;
 }
 
 void ParkingSlot::removeVehicle(){
     vehicle.reset();
     occupied = false;
+}
+
+time_t ParkingSlot::getEntryTime() const{
+    return entryTime;
 }
 
 const Vehicle* ParkingSlot::getVehicle() const{
