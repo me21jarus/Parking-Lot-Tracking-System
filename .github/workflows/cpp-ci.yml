@@ -1,0 +1,31 @@
+name: C++ CI - Parking Lot System
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install compiler
+        run: sudo apt-get update && sudo apt-get install -y g++
+
+      - name: Build project
+        run: |
+          g++ -std=c++17 \
+          main.cpp \
+          ParkingSlot.cpp \
+          ParkingLot.cpp \
+          ParkingStorage.cpp \
+          -o parking
+
+      - name: Run application (smoke test)
+        run: |
+          echo "4" | ./parking
