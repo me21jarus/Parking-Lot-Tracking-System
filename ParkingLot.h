@@ -4,15 +4,15 @@
 #include<vector>
 #include <string>
 #include "ParkingSlot.h"
+#include "ParkingStorage.h"
 using namespace std;
 
 class ParkingLot{
     private:
         vector<ParkingSlot> slots;
-        void loadFromFile();
-        void saveToFile();
+        ParkingStorage* storage;
     public:
-        ParkingLot(int totalSlots);
+        ParkingLot(int totalSlots, ParkingStorage* storage);
 
         void parkVehicle(const Vehicle& v);
         void removeVehicle(const string& vehicleNumber);

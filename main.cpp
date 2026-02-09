@@ -1,12 +1,13 @@
 #include<iostream>
 #include "ParkingLot.h"
+#include "ParkingStorage.h"
 #include "Vehicle.h"
 
 using namespace std;
 
 int main(){
-
-    ParkingLot parkingLot(5);
+    ParkingStorage* storage;
+    ParkingLot parkingLot(5, &storage);
     int choice;
 
     while(true){

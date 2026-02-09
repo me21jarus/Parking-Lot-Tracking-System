@@ -3,48 +3,48 @@
 #include<fstream>
 using namespace std;
 
-ParkingLot::ParkingLot(int totalSlots){
+ParkingLot::ParkingLot(int totalSlots, ParkingStorage* storage): storage(storage){
     for(int i=1;i<=totalSlots;i++){
         slots.push_back(ParkingSlot(i));
     }
-    loadFromFile();
+    storage->load(slots);
 }
 
-void ParkingLot::loadFromFile(){
-    ifstream file("parking_data.txt");
-    if(!file.is_open()){
-        return;
-    }
-    int slotNumber;
-    string vehicleNumber, vehicleType;
+// void ParkingLot::loadFromFile(){
+//     ifstream file("parking_data.txt");
+//     if(!file.is_open()){
+//         return;
+//     }
+//     int slotNumber;
+//     string vehicleNumber, vehicleType;
 
-    while(file >> slotNumber >> vehicleNumber >> vehicleType){
-        for(auto& slot:slots){
-            if(slot.getSlotNumber() == slotNumber){
-                Vehicle v(vehicleNumber, vehicleType);
-                slot.parkVehicle(v);
-                break;
-            }
-        }
-    }
-    file.close();
-}
+//     while(file >> slotNumber >> vehicleNumber >> vehicleType){
+//         for(auto& slot:slots){
+//             if(slot.getSlotNumber() == slotNumber){
+//                 Vehicle v(vehicleNumber, vehicleType);
+//                 slot.parkVehicle(v);
+//                 break;
+//             }
+//         }
+//     }
+//     file.close();
+// }
 
-void ParkingLot::saveToFile(){
-    ofstream file("parking_data.txt");
-    for(auto& slot:slots){
-        if(slot.isOccupied()){
-            file << slot.getSlotNumber()<<" "<<slot.getVehicle().getNumber()<<" "<<slot.getVehicle().getType()<<endl;
-        }
-    }
-    file.close();
-}
+// void ParkingLot::saveToFile(){
+//     ofstream file("parking_data.txt");
+//     for(auto& slot:slots){
+//         if(slot.isOccupied()){
+//             file << slot.getSlotNumber()<<" "<<slot.getVehicle().getNumber()<<" "<<slot.getVehicle().getType()<<endl;
+//         }
+//     }
+//     file.close();
+// }
 
 void ParkingLot::parkVehicle(const Vehicle& v){
     for(auto& slot:slots){
         if(!slot.isOccupied()){
             slot.parkVehicle(v);
-            saveToFile();
+            storage->save(slots);
             cout<<"Vehicle parked at the slot "<<slot.getSlotNumber()<<endl;
             return;
         }
@@ -56,7 +56,7 @@ void ParkingLot::removeVehicle(const string& vehicleNumber){
     for(auto& slot:slots){
         if(slot.isOccupied() && slot.getVehicle().getNumber() == vehicleNumber){
             slot.removeVehicle();
-            saveToFile();
+            storage->save(slots);
             cout<<"Vehicle removed from slot "<<slot.getSlotNumber()<<endl;
             return;
         }
